@@ -84,7 +84,8 @@ GLuint loadBMP(const std::string& path)
       len -= n;
       data_ptr = &(data_ptr[n]);
     }
-  } std::fclose(file);
+  }
+  std::fclose(file);
 
   GLuint texture_id;
   glGenTextures(1, &(texture_id));
