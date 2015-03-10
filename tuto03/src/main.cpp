@@ -82,7 +82,7 @@ int         main(void)
     glUseProgram(program_id);
 
     obj->draw();
-    moveCamera(program_id); /* @todo: check if order is revelant */
+    moveCamera(program_id);
 
     glfwSwapBuffers(window);
     glfwPollEvents(); /* @todo: check events */
