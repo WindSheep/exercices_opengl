@@ -5,8 +5,8 @@
 
 //-/* VARIABLES */-//
 ShaderProgram*                         Text2D::_program = NULL;
-
-Texture*                               Text2D::_texture = NULL;
+Texture*                               Text2D::_texture_normal = NULL;
+Texture*                               Text2D::_texture_highlight = NULL;
 
 static void                            _genText2DBuffers(const std::string& text, int y, int x, int size,
                                                         unsigned int& n_tri, GLuint& vbuffer, GLuint& uvbuffer)
@@ -14,6 +14,9 @@ static void                            _genText2DBuffers(const std::string& text
   std::vector<glm::vec2> vertices;
   std::vector<glm::vec2> UVs;
 
+  if (y <= 600) {
+    y = 600 - y;
+  }
   for (unsigned int i = 0 ; i < text.length(); ++(i)) {
     glm::vec2 vertex_up_left    = glm::vec2(x + i * size, y + size);
     glm::vec2 vertex_up_right   = glm::vec2(x + i * size + size, y + size);
@@ -59,8 +62,8 @@ static void                            _genText2DBuffers(const std::string& text
 }
 
 //-/* CONSTRUCTORS / DESTRUCTORS */-//
-/* CONSTRUCTOR */                      Text2D::Text2D(const std::string& str, unsigned int y, unsigned int x, unsigned int size) :
-  _n_tri(0), _vbuffer(0), _uvbuffer(0)
+/* CONSTRUCTOR */                      Text2D::Text2D(const std::string& str, unsigned int y, unsigned int x, unsigned int size, bool highlight) :
+  _n_tri(0), _vbuffer(0), _uvbuffer(0), _highlight(highlight)
 {
   _genText2DBuffers(str, y, x, size, this->_n_tri, this->_vbuffer, this->_uvbuffer);
 }
@@ -97,9 +100,12 @@ void                                   Text2D::drawPart(void)
                         );
 
   if (Text2D::s_isInit() || Text2D::s_init()) {
+    Texture* texture = this->_highlight ?
+      Text2D::_texture_highlight : Text2D::_texture_normal;
+
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, Text2D::_texture->getImageId());
-    glUniform1i(Text2D::_texture->getId(), 0);
+    glBindTexture(GL_TEXTURE_2D, texture->getImageId());
+    glUniform1i(texture->getId(), 0);
   }
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -119,20 +125,35 @@ void                                   Text2D::draw(void)
 }
 
 //-/* GETTERS / SETTERS */-//
+void                                   Text2D::setHighlight(bool highlight)
+{ this->_highlight = highlight; }
+
+bool                                   Text2D::getHighlight(void) const
+{ return this->_highlight; }
+
+void                                   Text2D::getHighlight(bool& highlight) const
+{ highlight = this->_highlight; }
+
 bool                                   Text2D::s_init(void)
 {
   if (!Text2D::s_isInit()) {
     Text2D::_program = new ShaderProgram("shaders/text2d/vertex.gl", "shaders/text2d/fragment.gl");
-    Text2D::_texture = new Texture("fonts/Holstein.DDS", *(Text2D::_program));
+    Text2D::_texture_normal = new Texture("fonts/Holstein.DDS", *(Text2D::_program));
+    Text2D::_texture_highlight = new Texture("fonts/ArialUnicodeMS_big.bmp", *(Text2D::_program));
   }
   return true;
 }
 
 void                                   Text2D::s_deInit(void)
 {
-  delete Text2D::_texture; Text2D::_texture = NULL;
+  delete Text2D::_texture_normal; Text2D::_texture_normal = NULL;
+  delete Text2D::_texture_highlight; Text2D::_texture_highlight = NULL;
   delete Text2D::_program; Text2D::_program = NULL;
 }
 
 bool                                   Text2D::s_isInit(void)
-{ return Text2D::_program != NULL && Text2D::_texture != NULL; }
+{
+  return Text2D::_program != NULL &&
+    Text2D::_texture_normal != NULL &&
+    Text2D::_texture_highlight != NULL;
+}

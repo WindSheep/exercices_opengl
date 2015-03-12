@@ -11,7 +11,7 @@ class Text2D
 {
 public:
   //-/* CONSTRUCTORS / DESTRUCTORS */-//
-  /* CONSTRUCTOR */                      Text2D(const std::string& str, unsigned int y, unsigned int x, unsigned int size);
+  /* CONSTRUCTOR */                      Text2D(const std::string& str, unsigned int y, unsigned int x, unsigned int size, bool highlight = false);
   virtual
   /* DESTRUCTOR */                       ~Text2D(void);
 
@@ -24,7 +24,6 @@ public:
   virtual
   void                                   draw(void);
 
-  //-/* GETTERS / SETTERS */-//
   static
   bool                                   s_init(void);
 
@@ -34,8 +33,11 @@ public:
   static
   bool                                   s_isInit(void);
 
-  // const std::string                      _str;
-  // const Texture*                         _font;
+  //-/* GETTERS / SETTERS */-//
+  void                                   setHighlight(bool highlight);
+
+  bool                                   getHighlight(void) const;
+  void                                   getHighlight(bool& highlight) const;
 
 private:
   //-/* FUNCTIONS */-//
@@ -45,12 +47,18 @@ private:
   unsigned int                           _n_tri;
   GLuint                                 _vbuffer;
   GLuint                                 _uvbuffer;
+  bool                                   _highlight;
+  // const std::string                      _str;
+  // const Texture*                         _font;
 
   static
   ShaderProgram*                         _program;
 
   static
-  Texture*                               _texture;
+  Texture*                               _texture_normal;
+
+  static
+  Texture*                               _texture_highlight;
 };
 /*                                     */
 

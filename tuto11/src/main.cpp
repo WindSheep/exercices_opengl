@@ -2,6 +2,7 @@
 #include "Camera.class.hpp"
 #include "Object3D.class.hpp"
 #include "ColoredObject3D.class.hpp"
+#include "Selector2D.class.hpp"
 #include "TexturedObject3D.class.hpp"
 #include "Text2D.class.hpp"
 
@@ -73,7 +74,7 @@ int           main(void)
   Camera*     camera;
   Object3D*   obj1;
   Object3D*   obj2;
-  Text2D*     text1;
+  Selector2D* selector;
   glm::vec3   pos1(0.0f, 0.0f, 0.0f);
   glm::vec3   pos2(0.0f, 0.0f, -5.0f);
 
@@ -89,24 +90,52 @@ int           main(void)
 
   obj1 = newColoredTriangle(pos1);
   obj2 = newTexturedCube(pos2);
-  text1 = new Text2D("toto", 500, 10, 25); /* x[0, 800] y[, 600] */
+  selector = newDefaultSelector2D();
 
   glClearColor(0.01f, 0.01f, 0.01f, 0);
+  glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_FALSE);
+
+  int keystate_up   = GLFW_KEY_UNKNOWN;
+  int keystate_down = GLFW_KEY_UNKNOWN;
   do {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     obj1->draw();
     obj2->draw();
-    text1->draw();
+    selector->draw();
 
     glfwSwapBuffers(window);
     glfwPollEvents(); /* @todo: check events */
+
+    if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+      std::cout << selector->getValue() << std::endl;
+      break;
+    }
+    else {
+      int state;
+
+      state = glfwGetKey(window, GLFW_KEY_UP);
+      if (state != keystate_up) {
+        keystate_up = state;
+        if (state == GLFW_PRESS) {
+          selector->next();
+        }
+      }
+
+      state = glfwGetKey(window, GLFW_KEY_DOWN);
+      if (state != keystate_down) {
+        keystate_down = state;
+        if (state == GLFW_PRESS) {
+          selector->previous();
+        }
+      }
+    }
 
   } while (glfwWindowShouldClose(window) == 0 && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS);
 
   delete obj1;
   delete obj2;
-  delete text1;
+  delete selector;
   Object3D::s_deInit();
   ColoredObject3D::s_deInit();
   TexturedObject3D::s_deInit();
