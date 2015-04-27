@@ -1,4 +1,4 @@
-#include "openGL.hpp"
+#include "opengl.hpp"
 #include <string>
 
 // GLuint loadTGA(const std::string& path)

@@ -7,8 +7,8 @@ DEBUG    = 0
 
 LDLIBS   =
 LOADLIBS = $(LDLIBS)
-CFLAGS   = -Wall -Wextra -Werror
-CFLAGS   = -ansi -Wpedantic -Weffc++
+CFLAGS   = -Wextra -Wall -Werror
+CFLAGS   = -Wpedantic -Weffc++
 CFLAGS   = -std=c++11
 LDFLAGS  = -lglfw3 -lXrandr -lXext -lX11 -lXxf86vm -lXrandr -lpthread -lXi -lm -lXcursor -lXinerama -lGL -lGLEW
 
