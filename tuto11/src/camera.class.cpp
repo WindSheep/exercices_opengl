@@ -3,7 +3,7 @@
 Camera* Camera::_camera = NULL;
 
 /* CTOR */ Camera::Camera(const glm::mat4& view, const glm::mat4& projection) :
-  _view(view), _projection(projection) {
+    _view(view), _projection(projection) {
 }
 
 /* DTOR */ Camera::~Camera(void) {

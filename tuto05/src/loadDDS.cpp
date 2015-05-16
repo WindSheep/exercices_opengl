@@ -87,6 +87,6 @@ GLuint loadDDS(const std::string& path)
     if (height < 1) { height = 1; }
   }
 
-  free(buffer);
+  std::free(buffer);
   return textureID;
 }

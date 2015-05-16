@@ -105,7 +105,8 @@ Object3D* newTexturedCube(const glm::vec3& pos)
   static Texture* texture = NULL;
 
   if (texture == NULL) {
-    texture = new Texture("textures/uvtemplate.bmp", *(TexturedObject3D::s_getShaderProgram()));
+    // texture = new Texture("textures/uvtemplate.bmp", *(TexturedObject3D::s_getShaderProgram()));
+    texture = new Texture("textures/uvtemplate.tga", *(TexturedObject3D::s_getShaderProgram()));
   } /* @todo: i know it leaks */
 
   return new TexturedObject3D(pos, 12, vertexbuffer_data, uvbuffer_data, *(texture));

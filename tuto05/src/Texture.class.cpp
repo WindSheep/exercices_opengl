@@ -21,6 +21,9 @@ GLuint                                 loadDDS(const std::string& path);
       else if (ext == "bmp") {
         this->image_id = loadBMP(path);
       }
+      else if (ext == "tga") {
+        this->image_id = loadTGA(path);
+      }
     }
   }
   this->texture_id = glGetUniformLocation(program.id, "myTextureSampler");
