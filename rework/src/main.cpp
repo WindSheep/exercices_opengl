@@ -11,6 +11,16 @@
 
 static GLuint g_vertex_array_id = 0;
 
+float win_width = 0;
+float win_height = 0;
+
+static void fbs_callback(GLFWwindow* window, int width, int height) {
+    static_cast<void>(window);
+    win_width = width;
+    win_height = height;
+    glViewport(0, 0, width, height);
+}
+
 GLFWwindow*   initOpenGL(void) {
     GLFWwindow* window; {
 
@@ -29,6 +39,8 @@ GLFWwindow*   initOpenGL(void) {
     }
     {
         // @note: create window
+        win_width = 1024;
+        win_height = 768;
         window = glfwCreateWindow(1024, 768, "OpenGL Window", NULL, NULL);
         if (window == NULL) {
             std::cerr << "Failed to open GLFW window." << std::endl;
@@ -43,6 +55,7 @@ GLFWwindow*   initOpenGL(void) {
             glfwTerminate();
             return NULL;
         }
+        glfwSetFramebufferSizeCallback(window, &fbs_callback);
 
         GLuint vertex_array_id;
         glGenVertexArrays(1, &(vertex_array_id));
@@ -83,8 +96,6 @@ Object3D* test(const glm::vec3& pos) {
     if (res == false) {
         return NULL;
     }
-    // glBufferData(GL_ARRAY_BUFFER, 9 * this->_n_tri * sizeof(*(vbuff_data)), vbuff_data, GL_STATIC_DRAW);
-    // glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
     return new Object3D(pos, vertices.size() / 3, &(vertices[0][0]));
 }
 
@@ -99,7 +110,6 @@ int main(void) {
     glm::vec3   pos2(-4.0f, 1.0f, -5.0f);
     glm::vec3   pos3(0.0f, 0.0f, -5.0f);
 
-    (void)pos3;
     if ( (window = initOpenGL()) == NULL) {
         return -1;
     }
