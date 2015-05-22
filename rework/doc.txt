@@ -1,0 +1,11 @@
+[glm::lookAt parameters]
+https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml
+http://stackoverflow.com/questions/21830340/understanding-glmlookat
+
+[glm::lookAt internals]
+http://stackoverflow.com/questions/19740463/lookat-function-im-going-crazy
+http://www.songho.ca/opengl/gl_transform.html
+
+[glm::perspective internals]
+http://medialab.di.unipi.it/web/IUM/Waterloo/node47.html#SECTION00810000000000000000
+https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml
